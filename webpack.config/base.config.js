@@ -13,7 +13,7 @@ module.exports = {
     },
     resolve: {
         alias: {
-            vue: 'vue/dist/vue.js',
+            vue: 'vue/dist/vue.common.js',
             components: path.join(root, 'src/components'),
             styles: path.join(root, 'src/styles'),
             scripts: path.join(root, 'src/scripts'),
