@@ -17,23 +17,27 @@ module.exports = {
             components: path.join(root, 'src/components'),
             styles: path.join(root, 'src/styles'),
             scripts: path.join(root, 'src/scripts'),
-            views: path.join(root, 'src/views')
+            views: path.join(root, 'src/views'),
+            images: path.join(root, 'src/images')
         },
-        extensions: ['*', '.js', '.vue']
+        extensions: ['*', '.js', '.vue'],
+        modules: [path.resolve(__dirname, '../node_modules')]
     },
     module: {
         rules: [
-            { test: /\.vue$/, use: 'vue-loader' },
-            { test: /\.js$/, use: 'babel-loader', exclude: /node_modules/ },
+            { test: /\.vue$/, use: { loader: 'vue-loader', options: { loaders: { css: ExtractTextPlugin.extract({ use: 'css-loader' }) } } } },
+            { test: /\.js$/, use: 'babel-loader', include: [path.join(root, 'src')] },
             { test: /\.css$/, use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' }) },
-            { test: /\.(png|jpg|gif)$/, use: 'url-loader' }
+            { test: /\.(woff|woff2|eot|ttf)$/, loader: 'url-loader?limit=100000' },
+            { test: /\.(png|jpe?g|gif)$/, use: { loader: 'url-loader', options: { limit: 10000, name: 'images/[name]:[hash:7].[ext]' } } }
         ]
     },
     plugins: [
+        new webpack.optimize.ModuleConcatenationPlugin(),        
         new HtmlWebpackPlugin({
             template: path.join(root, 'src/index.html'),
             inject: 'body'
         }),
-        new ExtractTextPlugin('style.css')
+        new ExtractTextPlugin('css/style.css')
     ]
 }
