@@ -2,5 +2,10 @@
     "presets": [
         ["env", {"module": false}]
     ],
-    "plugins": ["transform-runtime"]
+    "plugins": ["transform-runtime", ["transform-imports", {
+        "vuetify": {
+          "transform": "vuetify/es5/components/${member}",
+          "preventFullImport": true
+        }
+      }], "transform-object-rest-spread"]
 }

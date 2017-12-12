@@ -14,6 +14,9 @@ module.exports = {
     resolve: {
         alias: {
             vue: 'vue/dist/vue.common.js',
+            'vuetify-main': 'vuetify/dist',
+            'vuetify-components': 'vuetify/src/components',
+            'vuetify-stylus': 'vuetify/src/stylus',
             components: path.join(root, 'src/components'),
             styles: path.join(root, 'src/styles'),
             scripts: path.join(root, 'src/scripts'),
@@ -28,12 +31,13 @@ module.exports = {
             { test: /\.vue$/, use: { loader: 'vue-loader', options: { loaders: { css: ExtractTextPlugin.extract({ use: 'css-loader' }) } } } },
             { test: /\.js$/, use: 'babel-loader', include: [path.join(root, 'src')] },
             { test: /\.css$/, use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' }) },
+            { test: /\.styl$/, use: ['style-loader', 'css-loader', 'stylus-loader'] },
             { test: /\.(woff|woff2|eot|ttf)$/, loader: 'url-loader?limit=100000' },
             { test: /\.(png|jpe?g|gif)$/, use: { loader: 'url-loader', options: { limit: 10000, name: 'images/[name]:[hash:7].[ext]' } } }
         ]
     },
     plugins: [
-        new webpack.optimize.ModuleConcatenationPlugin(),        
+        new webpack.optimize.ModuleConcatenationPlugin(),
         new HtmlWebpackPlugin({
             template: path.join(root, 'src/index.html'),
             inject: 'body'
