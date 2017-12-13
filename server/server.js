@@ -6,7 +6,7 @@ const log = require('./log.js');
 const utils = require('./utils.js');
 
 const port = utils.getOpts('port', 3030),
-app = new koa();
+      app = new koa();
 
 // import middlewares
 const bodyParser = require('koa-bodyparser'),

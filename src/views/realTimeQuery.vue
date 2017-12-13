@@ -11,27 +11,34 @@
                         label="路线"
                         prepend-icon="search"
                         v-model="query"
-                        @blur="onQueryInputBlur_"
+                        @input="getQueryResult_"
+                        @focus="getQueryResult_"
                     >
                     </v-text-field>
-                    <transition name="slide-fade" mode="out-in">
+                    <transition name="slide-fade" mode="in-out">
                         <v-list
                             v-if="showQueryResult"
-                            class="query-input-result-list"
+                            class="query-input-result-list elevation-1"
                         >
-                            <v-list-tile
-                                class="query-input-result"
-                                v-for="result in queryResults"
-                                :key="result.id"
-                                @click="onQueryResultClicked_"
+                            <template
+                                v-for="(result, index) in queryResults"
                             >
-                                <v-list-tile-content>
-                                    <v-list-tile-title>{{ result.number }}</v-list-tile-title>
-                                    <v-list-tile-sub-title>{{ result.direction }}</v-list-tile-sub-title>
-                                </v-list-tile-content>
-                            </v-list-tile>
+                                <v-list-tile
+                                    ripple
+                                    class="query-input-result"
+                                    :key="result.id"
+                                    @click="onQueryResultClicked_"
+                                >
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>{{ result.number }}</v-list-tile-title>
+                                        <v-list-tile-sub-title>{{ result.direction }}</v-list-tile-sub-title>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+                                <v-divider v-if="index + 1 < queryResults.length"></v-divider>
+                            </template>
                         </v-list>
                     </transition>
+                    <div class="mask" v-if="showQueryResult" @click="onMaskClicked_"></div>
                 </v-flex>
             </v-layout>
         </v-container>
@@ -60,6 +67,7 @@
 </template>
 
 <script>
+    import router from '../router';
     import { getBusLineList } from '../api';
 
     export default {
@@ -75,9 +83,6 @@
                 { number: '1路', direction: '拱北 <-> 吉大' },
                 { number: '1路', direction: '拱北 <-> 吉大' },
                 { number: '1路', direction: '拱北 <-> 吉大' },
-                { number: '1路', direction: '拱北 <-> 吉大' },
-                { number: '1路', direction: '拱北 <-> 吉大' },
-                { number: '1路', direction: '拱北 <-> 吉大' },
             ]
         }),
         created: function() {
@@ -88,11 +93,30 @@
 
             },
             onQueryResultClicked_: function() {
-
+                router.push('/real_time/status');
             },
-            onQueryInputBlur_: async function(event) {
+            onMaskClicked_: function() {
+                this.showQueryResult = false;
+            },
+            getQueryResult_: async function(event) {
+                if (!this.query) {
+                    this.showQueryResult = false;
+                    return;
+                }
                 const queryResult = await getBusLineList(this.query);
-                if (queryResult) console.log(queryResult);
+                if (queryResult && !queryResult.error) {
+                    const { data, flag } = queryResult.data;
+                    if (data && flag !== 1004) {
+                        this.queryResults = data.map(line => {
+                            return { id: line.Id, number: line.LineNumber, direction: `${line.FromStation} -> ${line.ToStation}` }
+                        });
+                    } else {
+                        this.queryResults = [];
+                    }
+                } else {
+                    this.queryResults = [];
+                }
+                this.showQueryResult = !!this.queryResults.length;
             }
         }
     }
@@ -116,7 +140,22 @@
     .query-input-result-list {
         width: 100%;
         position: absolute;
-        bottom: -46px;
+        bottom: -90px;
+        z-index: 3;
+    }
+
+    .query-input-result {
+        
+    }
+
+    .mask {
+        display: block;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 2;
     }
 </style>
 

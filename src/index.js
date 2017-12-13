@@ -1,6 +1,6 @@
 // vue
 import Vue from 'vue';
-import { Vuetify, VApp, VNavigationDrawer, VSubheader, VTextField, VList, VBtn, VToolbar, VIcon, VGrid } from 'vuetify';
+import { Vuetify, VApp, VNavigationDrawer, VSubheader, VTextField, VList, VBtn, VDivider, VToolbar, VIcon, VGrid } from 'vuetify';
 
 // styles
 import 'vuetify-stylus/app.styl';
@@ -20,6 +20,7 @@ Vue.use(Vuetify, {
       VTextField,
       VList,
       VBtn,
+      VDivider,
       VToolbar,
       VIcon,
       VGrid

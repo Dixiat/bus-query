@@ -44,14 +44,14 @@
 </template>
 
 <script>
-    import router from '../router'
+    import router from '../router';
     export default {
         data: () => ({
             showDrawer: true,
             menuItems: [
-                { title: '实时查询', icon: 'query_builder', route: 'real_time', isActive: true },
-                { title: '换乘', icon: 'directions_bus', route: 'bus_change', isActive: false },
-                { title: '站点查询', icon: 'place', route: 'bus_station', isActive: false }
+                { title: '实时查询', icon: 'query_builder', route: '/real_time', isActive: true },
+                { title: '换乘', icon: 'directions_bus', route: '/bus_change', isActive: false },
+                { title: '站点查询', icon: 'place', route: '/bus_station', isActive: false }
             ],
             currentRoute: 'real_time'
         }),
