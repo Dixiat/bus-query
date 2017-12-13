@@ -2777,6 +2777,10 @@ koa-convert@^1.2.0:
     co "^4.6.0"
     koa-compose "^3.0.0"
 
+koa-cors@^0.0.16:
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/koa-cors/-/koa-cors-0.0.16.tgz#98107993a7909e34c042986c5ec6156d77f3432e"
+
 koa-is-json@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/koa-is-json/-/koa-is-json-1.0.0.tgz#273c07edcdcb8df6a2c1ab7d59ee76491451ec14"
@@ -4920,6 +4924,10 @@ vue@^2.5.9:
 vuetify@^0.17.4:
   version "0.17.4"
   resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-0.17.4.tgz#6afc01e661f920be4ff58089f846b590cd0bdd29"
+
+vuex@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.0.1.tgz#e761352ebe0af537d4bb755a9b9dc4be3df7efd2"
 
 watchpack@^1.4.0:
   version "1.4.0"
