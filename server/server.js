@@ -5,16 +5,18 @@ const path = require('path'),
 const log = require('./log.js');
 const utils = require('./utils.js');
 
-const port = utils.getOpts('port', 3000),
+const port = utils.getOpts('port', 3030),
 app = new koa();
 
 // import middlewares
 const bodyParser = require('koa-bodyparser'),
-      staticFile = require('koa-static');
+      staticFile = require('koa-static'),
+      cors = require('koa-cors');
 
 const router = require('./router.js');
 
 app.use(bodyParser({ encode: 'utf8' }));
+app.use(cors());
 app.use(router());
 app.use(staticFile(path.resolve(__dirname, '../dist')));
 
