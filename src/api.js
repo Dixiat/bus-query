@@ -3,6 +3,7 @@ import axios from 'axios';
 
 /* api instance */
 const busQueryInstance = axios.create({
+    baseURL: 'http://localhost:3030',
     timeout: 1000,
 });
 
@@ -11,12 +12,14 @@ const busQueryInstance = axios.create({
 // get bus line list
 export const getBusLineList = query => {
     const key = encodeURIComponent(query),
-          timestamp = Date.now();
-    return busQueryInstance.post('/real_time/bus_line_list', { key })
+          url = '/real_time/bus_line_list';
+
+    return busQueryInstance.post(url, { key })
             .then(response => {
-                return { data: response.data, error: null };
+                if (response.data && !response.data.error)
+                return response.data;
             })
             .catch(error => {
-                return { data: null, error };
+                console.error(`Request ${url} error:`, error);
             });
     };
