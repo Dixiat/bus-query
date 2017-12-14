@@ -11,6 +11,6 @@ const routes = [
     { path: '/real_time/status', component: ViewRealTimeStatus }
 ];
 const router = new VueRouter({ routes });
-router.replace({ path: '/real_time/status', component: ViewRealTimeStatus, props: true });
+router.replace({ path: '/real_time', component: ViewRealTimeQuery });
 
 export default router;

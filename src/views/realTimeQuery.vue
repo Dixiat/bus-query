@@ -21,20 +21,21 @@
                             class="query-input-result-list elevation-1"
                         >
                             <template
-                                v-for="(result, index) in queryResults"
+                                v-for="(line, index) in busLines"
                             >
                                 <v-list-tile
                                     ripple
                                     class="query-input-result"
-                                    :key="result.id"
-                                    @click="onQueryResultClicked_"
+                                    source="Query"
+                                    :key="line.id"
+                                    @click.stop="getRealTimeStatus_(line.id, $event)"
                                 >
                                     <v-list-tile-content>
-                                        <v-list-tile-title>{{ result.number }}</v-list-tile-title>
-                                        <v-list-tile-sub-title>{{ result.direction }}</v-list-tile-sub-title>
+                                        <v-list-tile-title>{{ line.number }}</v-list-tile-title>
+                                        <v-list-tile-sub-title>{{ line.direction }}</v-list-tile-sub-title>
                                     </v-list-tile-content>
                                 </v-list-tile>
-                                <v-divider v-if="index + 1 < queryResults.length"></v-divider>
+                                <v-divider v-if="index + 1 < busLines.length"></v-divider>
                             </template>
                         </v-list>
                     </transition>
@@ -48,10 +49,12 @@
         <v-container>
             <v-list class="query-history-list">
                 <v-list-tile
+                    ripple
                     class="query-history-list-item"
-                    v-for="item in historyItems"
+                    source="History"
+                    v-for="item in queryHistoryList"
                     :key="item.id"
-                    @click="onHistoryItemClicked_"
+                    @click="getRealTimeStatus_(item.id, $event)"
                 >
                     <v-list-tile-action>
                         <v-icon>directions_bus</v-icon>
@@ -68,56 +71,39 @@
 
 <script>
     import router from '../router';
-    import { getBusLineList } from '../api';
+
+    import { mapGetters, mapState, mapActions, mapMutations } from 'vuex';
+    import { CLEAR_QUERY_RESULT, SELECT_BUS_LINE, GOTO_SUB_PAGE, ADD_QUERY_HISTORY_ITEM } from '../store/mutationTypes';
 
     export default {
         data: () => ({
             query: '',
-            showQueryResult: false,
-            queryResults: [
-                { number: '1路', direction: '拱北 <-> 吉大' },
-            ],
-            historyItems: [
-                { number: '1路', direction: '拱北 <-> 吉大' },
-                { number: '1路', direction: '拱北 <-> 吉大' },
-                { number: '1路', direction: '拱北 <-> 吉大' },
-                { number: '1路', direction: '拱北 <-> 吉大' },
-                { number: '1路', direction: '拱北 <-> 吉大' },
-            ]
         }),
         created: function() {
             
         },
+        computed: {
+            ...mapState('realTimeQuery/',[
+                'queryHistoryList',
+            ]),
+            ...mapGetters('realTimeQuery/',[
+                'busLines',
+                'showQueryResult'
+            ])
+        },
         methods: {
-            onHistoryItemClicked_: function() {
-
+            getQueryResult_: function(event) {
+                this.$store.dispatch('realTimeQuery/getQueryResult', this.query);
             },
-            onQueryResultClicked_: function() {
+            getRealTimeStatus_(id, event) {
+                const source = event.currentTarget.querySelector('a').getAttribute('source');
+                this.$store.dispatch(`realTimeQuery/getRealTimeStatusFrom${source}`, id);
+                this.$store.commit('common/' + GOTO_SUB_PAGE);
                 router.push('/real_time/status');
             },
-            onMaskClicked_: function() {
-                this.showQueryResult = false;
-            },
-            getQueryResult_: async function(event) {
-                if (!this.query) {
-                    this.showQueryResult = false;
-                    return;
-                }
-                const queryResult = await getBusLineList(this.query);
-                if (queryResult && !queryResult.error) {
-                    const { data, flag } = queryResult.data;
-                    if (data && flag !== 1004) {
-                        this.queryResults = data.map(line => {
-                            return { id: line.Id, number: line.LineNumber, direction: `${line.FromStation} -> ${line.ToStation}` }
-                        });
-                    } else {
-                        this.queryResults = [];
-                    }
-                } else {
-                    this.queryResults = [];
-                }
-                this.showQueryResult = !!this.queryResults.length;
-            }
+            ...mapMutations('realTimeQuery/', {
+                onMaskClicked_: CLEAR_QUERY_RESULT
+            })
         }
     }
 </script>

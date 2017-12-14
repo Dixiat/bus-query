@@ -1,18 +1,18 @@
 <template>
     <v-layout column>
         <v-flex class="price-tag-container" xs-12>
-            <h3 class="price-tag">￥{{price}}</h3>
+            <h3 class="price-tag">￥{{selectedBusLineInfo.price}}</h3>
         </v-flex>
         <v-layout row>
             <v-flex id="from-station-name" class="station-name" d-flex xs-3>
-                <h3>{{fromStation}}</h3>
+                <h3>{{selectedBusLineInfo.fromStation}}</h3>
                 <h4>STATION</h4>
             </v-flex>
             <v-flex id="to-station-name" class="icon-container" xs-6>
                 <img class="icon" src="../images/bus.png" alt="bus">
             </v-flex>
             <v-flex class="station-name" d-flex xs-3>
-                <h3>{{toStation}}</h3>
+                <h3>{{selectedBusLineInfo.toStation}}</h3>
                 <h4>STATION</h4>
             </v-flex>
         </v-layout>
@@ -27,13 +27,13 @@
             </v-layout>
             <v-layout class="time-container" row>
                 <v-flex class="time-label-container" xs-3>
-                    <span class="time-label">{{startTime}}</span>
+                    <span class="time-label">{{selectedBusLineInfo.beginTime}}</span>
                 </v-flex>
                 <v-flex class="label-container" xs-1>
                     <span class="label">-></span>
                 </v-flex>
                 <v-flex class="time-label-container" xs-3>
-                    <span class="time-label">{{endTime}}</span>
+                    <span class="time-label">{{selectedBusLineInfo.endTime}}</span>
                 </v-flex>
             </v-layout>
         </v-layout>
@@ -41,15 +41,14 @@
 </template>
 
 <script>
+    import { mapGetters, mapState, mapActions, mapMutations } from 'vuex';
+
     export default {
-        // props: ['price', 'fromStation', 'toStation', 'startTime', 'endTime'],
-        data: () => ({
-            price: 2,
-            fromStation: '吉大',
-            toStation: '拱北总站',
-            startTime: '06:30',
-            endTime: '22:30'
-        })
+        computed: {
+            ...mapGetters('realTimeQuery/', [
+                'selectedBusLineInfo'
+            ])
+        }
     }
 </script>
 

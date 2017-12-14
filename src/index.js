@@ -7,6 +7,9 @@ import 'vuetify-stylus/app.styl';
 import './styles/icons.css';
 import './styles/transitions.css';
 
+// store
+import store from './store/index';
+
 // router
 import router from './router';
 import Layout from 'views/layout'
@@ -31,5 +34,6 @@ const app = new Vue({
     el: '#app',
     template: '<div><layout></layout></div>',
     components: {Layout},
-    router
+    router,
+    store
 });

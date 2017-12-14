@@ -25,9 +25,15 @@
             </v-list>
         </v-navigation-drawer>
         <v-toolbar app fixed clipped-left>
+            <v-btn
+                icon
+                v-if="!isInMainPage"
+                @click="onArrowBackBtnClicked_"
+            >
+                <v-icon>arrow_back</v-icon>
+            </v-btn>
             <v-toolbar-side-icon
-                large
-                v-if="$vuetify.breakpoint.width <= 1264"
+                v-else-if="$vuetify.breakpoint.width <= 1264 && isInMainPage"
                 @click="showDrawer = !showDrawer"
             >
             </v-toolbar-side-icon>
@@ -35,16 +41,17 @@
         </v-toolbar>
         <v-content>
             <transition name="fade" mode="out-in">
-                <keep-alive>
-                    <router-view></router-view>
-                </keep-alive>
+                <router-view></router-view>
             </transition>
         </v-content>
     </v-app>
 </template>
 
 <script>
+    import { mapState, mapMutations } from 'vuex';
     import router from '../router';
+    import { GOTO_MAIN_PAGE } from '../store/mutationTypes';
+
     export default {
         data: () => ({
             showDrawer: true,
@@ -53,13 +60,16 @@
                 { title: '换乘', icon: 'directions_bus', route: '/bus_change', isActive: false },
                 { title: '站点查询', icon: 'place', route: '/bus_station', isActive: false }
             ],
-            currentRoute: 'real_time'
+            currentRoute: 'real_time',
         }),
         computed: {
             toolbarTitle: function() {
                 const selectedMenuItem = this.menuItems.find(item => item.route === this.currentRoute);
                 return selectedMenuItem ? selectedMenuItem.title : '公交查询';
-            }
+            },
+            ...mapState('common/', [
+                'isInMainPage'
+            ])
         },
         created: function() {
         },
@@ -72,6 +82,10 @@
 
                 this.currentRoute = route;
                 router.push(route);
+            },
+            onArrowBackBtnClicked_: function() {
+                router.push('/real_time');
+                this.$store.commit('common/' + GOTO_MAIN_PAGE);
             }
         }
     }
