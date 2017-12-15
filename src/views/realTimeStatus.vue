@@ -37,16 +37,23 @@
                 </v-flex>
             </v-layout>
         </v-layout>
+        <bus-station-info-list :station-infos="realTimeStatus"></bus-station-info-list>
     </v-layout>
 </template>
 
 <script>
+    import Vue from 'vue';
     import { mapGetters, mapState, mapActions, mapMutations } from 'vuex';
+
+    import BusStationInfoList from '../components/busStationInfoList';
+
+    Vue.component(BusStationInfoList.name, BusStationInfoList);
 
     export default {
         computed: {
             ...mapGetters('realTimeQuery/', [
-                'selectedBusLineInfo'
+                'selectedBusLineInfo',
+                'realTimeStatus'
             ])
         }
     }

@@ -1,6 +1,6 @@
 // vue
 import Vue from 'vue';
-import { Vuetify, VApp, VNavigationDrawer, VSubheader, VTextField, VList, VBtn, VDivider, VToolbar, VIcon, VGrid } from 'vuetify';
+import { Vuetify, VApp, VCard, VChip, VNavigationDrawer, VSubheader, VTextField, VList, VBtn, VDivider, VToolbar, VIcon, VGrid } from 'vuetify';
 
 // styles
 import 'vuetify-stylus/app.styl';
@@ -18,6 +18,8 @@ import Layout from 'views/layout'
 Vue.use(Vuetify, {
     components: {
       VApp,
+      VCard,
+      VChip,
       VNavigationDrawer,
       VSubheader,
       VTextField,

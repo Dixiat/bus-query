@@ -35,7 +35,7 @@
                                         <v-list-tile-sub-title>{{ line.direction }}</v-list-tile-sub-title>
                                     </v-list-tile-content>
                                 </v-list-tile>
-                                <v-divider v-if="index + 1 < busLines.length"></v-divider>
+                                <v-divider :key="index" v-if="index + 1 < busLines.length"></v-divider>
                             </template>
                         </v-list>
                     </transition>

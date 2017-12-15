@@ -1,6 +1,6 @@
-import { ADD_QUERY_HISTORY_ITEM, DELETE_QUERY_HISTORY_ITEM, CLEAR_QUERY_HISTORY_LIST, UPDATE_QUERY_RESULT, CLEAR_QUERY_RESULT, SELECT_BUS_LINE } from '../mutationTypes';
+import { ADD_QUERY_HISTORY_ITEM, DELETE_QUERY_HISTORY_ITEM, CLEAR_QUERY_HISTORY_LIST, UPDATE_QUERY_RESULT, CLEAR_QUERY_RESULT, SELECT_BUS_LINE, UPDATE_BUS_STATION_LIST } from '../mutationTypes';
 
-import { getBusLineList } from '../../api';
+import { getBusLineList, getBusStationList, getBusRealTimeStatus } from '../../api';
 
 const realTimeQuery = {
     namespaced: true,
@@ -8,8 +8,8 @@ const realTimeQuery = {
         queryResults: {},
         queryHistoryList: [],
         selectedBusLine: '',
+        busStationList: [],
         busStationStatus: {},
-        realTimeStatus: {}
     },
     getters: {
         busLines(state) {
@@ -41,6 +41,22 @@ const realTimeQuery = {
         },
         showQueryResult(state, getters) {
             return !!getters.busLines.length;
+        },
+        realTimeStatus(state) {
+            let realTimeStatus = [];
+            const busStationList = state.busStationList;
+            if (busStationList && busStationList.data && !busStationList.error) {
+                const { data, flag } = busStationList.data;
+                if (data && flag !== 1004) {
+                    realTimeStatus = data.map(busStation => ({
+                        id: busStation.Id,
+                        stationName: busStation.Name,
+                        busListAtStation: [],
+                        busListBeforeStation: []
+                    }));
+                }
+            }
+            return realTimeStatus;
         }
     },
     mutations: {
@@ -62,6 +78,9 @@ const realTimeQuery = {
         },
         [SELECT_BUS_LINE](state, id) {
             state.selectedBusLine = id;
+        },
+        [UPDATE_BUS_STATION_LIST](state, busStationList) {
+            state.busStationList = busStationList;
         }
     },
     actions: {
@@ -73,9 +92,16 @@ const realTimeQuery = {
                 commit(CLEAR_QUERY_RESULT);
             }
         },
-        getRealTimeStatusFromQuery({ commit, state, getters }, id) {
+        async getRealTimeStatusFromQuery({ commit, state, getters }, id) {
+            // 获取查询路线信息
             commit(SELECT_BUS_LINE, id);
             commit(ADD_QUERY_HISTORY_ITEM, getters.selectedBusLineInfo);
+            // 获取并更新路线站点列表
+            const stationList = await getBusStationList(id);
+            commit(UPDATE_BUS_STATION_LIST, stationList);
+            // 获取公交实时信息
+            const { number, fromStation} = getters.selectedBusLineInfo;
+            const realTimeStatus = await getBusRealTimeStatus(number, fromStation);
         },
         getRealTimeStatusFromHistory({ commit, state, getters }, id) {
             commit(SELECT_BUS_LINE, id);
