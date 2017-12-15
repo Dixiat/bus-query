@@ -8,6 +8,13 @@ const busQueryInstance = axios.create({
 });
 
 /* bus query api */
+const successCb = response => {
+    if (response.data && !response.data.error)
+        return response.data;
+};
+const errorCb = error => {
+    console.error(`Request ${url} error:`, error);
+};
 
 // get bus line list
 export const getBusLineList = query => {
@@ -15,11 +22,26 @@ export const getBusLineList = query => {
           url = '/real_time/bus_line_list';
 
     return busQueryInstance.post(url, { key })
-            .then(response => {
-                if (response.data && !response.data.error)
-                return response.data;
-            })
-            .catch(error => {
-                console.error(`Request ${url} error:`, error);
-            });
-    };
+            .then(successCb)
+            .catch(errorCb);
+};
+
+// get bus station list
+export const getBusStationList = id => {
+    const url = '/real_time/bus_station_list';
+
+    return busQueryInstance.post(url, { id })
+            .then(successCb)
+            .catch(errorCb);
+};
+
+// get bus real-time status
+export const getBusRealTimeStatus = (number, station) => {
+    const url = '/real_time/bus_real_time_status',
+          id = encodeURIComponent(number),
+          fromStation = encodeURIComponent(station);
+
+    return busQueryInstance.post(url, { id, fromStation })
+            .then(successCb)
+            .catch(errorCb);
+};
