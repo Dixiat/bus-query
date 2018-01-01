@@ -46,24 +46,29 @@
         <v-flex xs-12>
             <v-subheader>历史记录</v-subheader>
         </v-flex>
-        <v-container>
-            <v-list class="query-history-list">
-                <v-list-tile
-                    ripple
-                    class="query-history-list-item"
-                    source="History"
-                    v-for="item in queryHistoryList"
-                    :key="item.id"
-                    @click="getRealTimeStatus_(item.id, $event)"
+        <v-container class="query-history-container">
+            <span v-if="queryHistoryList.length < 1" class="label">记录为空</span>
+            <v-list v-else class="query-history-list elevation-1">
+                <template
+                    v-for="(item, index) in queryHistoryList"
                 >
-                    <v-list-tile-action>
-                        <v-icon>directions_bus</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                        <v-list-tile-title>{{ item.number }}</v-list-tile-title>
-                        <v-list-tile-sub-title>{{ item.direction }}</v-list-tile-sub-title>
-                    </v-list-tile-content>
-                </v-list-tile>
+                    <v-list-tile
+                        ripple
+                        class="query-history-list-item"
+                        source="History"
+                        :key="item.id"
+                        @click="getRealTimeStatus_(item.id, $event)"
+                    >
+                        <v-list-tile-action>
+                            <v-icon>directions_bus</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>{{ item.number }}</v-list-tile-title>
+                            <v-list-tile-sub-title>{{ item.direction }}</v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                    <v-divider :key="index" v-if="index + 1 < queryHistoryList.length"></v-divider>
+                </template>
             </v-list>
         </v-container>
     </v-layout>
@@ -126,7 +131,7 @@
     .query-input-result-list {
         width: 100%;
         position: absolute;
-        bottom: -90px;
+        top: calc(100% - 12px);
         z-index: 3;
     }
 
@@ -142,6 +147,13 @@
         top: 0;
         left: 0;
         z-index: 2;
+    }
+
+    .query-history-container .label {
+        width: 100%;
+        text-align: center;
+        display: inline-block;
+        color: #adadad;
     }
 </style>
 

@@ -10,9 +10,9 @@
                 <v-flex class="bus-info-container" xs-12 row>
                     <p class="text">停靠：</p>
                     <template v-for="(bus, index) in busListAtStation">
-                        <v-chip :key="index" text-color="white" color="green" @click="bus.showLicensePlate = !bus.showLicensePlate">
+                        <v-chip :key="index" text-color="white" color="green" @click="bus.showBusNumber = !bus.showBusNumber">
                             <v-icon>directions_bus</v-icon>
-                            <span v-show="bus.showLicensePlate" class="label license-plate">{{bus.licensePlate}}</span>
+                            <span v-show="bus.showBusNumber" class="label license-plate">{{bus.busNumber}}</span>
                         </v-chip>
                     </template>
                     <p v-if="!busListAtStation.length" class="text tip">暂无</p>
@@ -20,9 +20,9 @@
                 <v-flex class="bus-info-container" xs-12 row>
                     <p class="text">即将到站：</p>
                     <template v-for="(bus, index) in busListBeforeStation">
-                        <v-chip :key="index" text-color="white" color="light-blue" @click="bus.showLicensePlate = !bus.showLicensePlate">
+                        <v-chip :key="index" text-color="white" color="light-blue" @click="bus.showBusNumber = !bus.showBusNumber">
                             <v-icon>directions_bus</v-icon>
-                            <span v-show="bus.showLicensePlate" class="label license-plate">{{bus.licensePlate}}</span>
+                            <span v-show="bus.showBusNumber" class="label license-plate">{{bus.busNumber}}</span>
                         </v-chip>
                     </template>
                     <p v-if="!busListBeforeStation.length" class="text tip">暂无</p>

@@ -1,5 +1,9 @@
 import { GOTO_MAIN_PAGE, GOTO_SUB_PAGE } from '../mutationTypes';
 
+const routesMap = {
+    'real_time': 'realTimeQuery'
+};
+
 const common = {
     namespaced: true,
     state: {
@@ -11,6 +15,11 @@ const common = {
         },
         [GOTO_SUB_PAGE](state) {
             state.isInMainPage = false;
+        }
+    },
+    actions: {
+        backforward({ commit }) {
+            commit(GOTO_MAIN_PAGE);
         }
     }
 };

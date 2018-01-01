@@ -51,9 +51,11 @@
 
     export default {
         computed: {
-            ...mapGetters('realTimeQuery/', [
-                'selectedBusLineInfo',
+            ...mapState('realTimeQuery/', [
                 'realTimeStatus'
+            ]),
+            ...mapGetters('realTimeQuery/', [
+                'selectedBusLineInfo'
             ])
         }
     }

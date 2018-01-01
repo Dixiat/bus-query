@@ -11,7 +11,7 @@ const route4getBusLineList = async (ctx, next) => {
         const result = await getBusLineList(key);
         ctx.response.body = JSON.stringify(result);
     } catch (error) {
-        log.error('An error occured:', error.message);
+        log.error('An error occurred:', error.message);
         ctx.response.body = { data: null, error };
     }
 };
