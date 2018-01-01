@@ -12,7 +12,7 @@ const successCb = response => {
     if (response.data && !response.data.error)
         return response.data;
 };
-const errorCb = error => {
+const errorCb = (error, url) => error => {
     console.error(`Request ${url} error:`, error);
 };
 
@@ -23,7 +23,7 @@ export const getBusLineList = query => {
 
     return busQueryInstance.post(url, { key })
             .then(successCb)
-            .catch(errorCb);
+            .catch(e => errorCb(e, url));
 };
 
 // get bus station list
@@ -32,7 +32,7 @@ export const getBusStationList = id => {
 
     return busQueryInstance.post(url, { id })
             .then(successCb)
-            .catch(errorCb);
+            .catch(e => errorCb(e, url));
 };
 
 // get bus real-time status
@@ -43,5 +43,5 @@ export const getBusRealTimeStatus = (number, station) => {
 
     return busQueryInstance.post(url, { id, fromStation })
             .then(successCb)
-            .catch(errorCb);
+            .catch(e => errorCb(e, url));
 };
