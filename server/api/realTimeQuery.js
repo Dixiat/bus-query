@@ -1,11 +1,11 @@
 const { busQueryInstance } = require('./common');
 
 /* define api request callback */
-const successCb = response => { 
+const successCb = response => {
     return { data: response.data, error: null };
 };
 const errorCb = error => {
-    return { data: null, error };
+    return { data: null, error: error.message };
 };
 
 /* define api request */
